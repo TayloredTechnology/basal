@@ -5,7 +5,7 @@ MAINTAINER Keidrych Anton-Oates <keidrych@tayloredtechnology.net>
 # 0@Cache -- Perma-Cached
 # Update to testing / stretch branch for SQLite & latest stable? updates
 # Base Only Packages
-COPY sources.list /etc/apt/sources.list
+COPY base/sources.list /etc/apt/sources.list
 ENV DEBIAN_FRONTEND=noninteractive
 # RUN install_packages/install_packages netselect-apt curl && \
 #			netselect-apt -n stretch"
@@ -33,11 +33,12 @@ ARG VCONFD=0.12.0-alpha3
 RUN fetch --repo="https://github.com/kelseyhightower/confd" --tag="=v$VCONFD" --release-asset="confd-$VCONFD-linux-amd64" /usr/bin/ && \
 		mv /usr/bin/confd-$VCONFD-linux-amd64 /usr/bin/confd && \
 		chmod +x /usr/bin/confd
-# Local Copy (if not using remote pull)
-#ADD bin/confd /usr/bin/confd
-#RUN chmod +x /usr/bin/confd
 
 # S6 always uses /init to run
 ENTRYPOINT ["/init"]
+
 # Volumes
 VOLUME ["/app"]
+
+# Confd Configuration files
+COPY base/confd/ /etc/confd/
