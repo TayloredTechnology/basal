@@ -1,0 +1,10 @@
+#!/usr/bin/execlineb -P
+
+s6-envuidgid www-data
+
+foreground {
+	if -n { s6-test -d /run/php }
+	mkdir -p /run/php
+}
+
+exec php-fpm7.0 --nodaemonize

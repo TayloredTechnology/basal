@@ -1,0 +1,7 @@
+[template]
+src = "nginx-site.tmpl"
+dest = "/etc/nginx/sites-enabled/default"
+keys = [
+  "/nginx",
+]
+check_cmd = "nginx -t"

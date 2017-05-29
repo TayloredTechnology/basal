@@ -1,0 +1,6 @@
+[template]
+src = "wp-config.tmpl.php"
+dest = "/public/wp-config.php"
+keys = [
+  "/wp",
+]

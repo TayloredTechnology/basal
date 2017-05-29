@@ -1,0 +1,71 @@
+# Notes
+# Ensure fastcgi_cache is disabled - using server proxy level cache @ this time
+# TODO: potential to per user cache using fastcgi_cache as a Level 2 (X2-Cache) caching system
+
+# Multi-domain redirects
+server {
+    listen 80;
+    #listen 443 ssl spdy;
+    server_name *.{{getenv "ROOT_DOMAIN"}};
+    rewrite ^ https://{{getenv "ROOT_DOMAIN"}}$request_uri permanent;
+}
+
+server {
+        listen   80; ## listen for ipv4; this line is default and implied
+
+        root /public;
+        index index.php;
+
+        server_name {{getenv "ROOT_DOMAIN"}};
+
+        # Rewrite any plugins pulling wrong full path to correct values
+        rewrite ^/app/website(.*)$ $1 last;
+
+        # WORDPRESS Plugin Compatibility / Standardization rewrites
+        location /my-account/lost-password/ {
+            return 301 /wp-login.php?action=lostpassword;
+        }
+
+        location / {
+            try_files $uri $uri/ /index.php?args;
+        }
+
+#        location ~ ^/(status|ping|utilz) {
+#            fastcgi_keep_conn on;
+#            fastcgi_pass   unix:/run/php/php7.0-fpm.sock;
+#            fastcgi_index  index.php;
+#            include        fastcgi_params;
+#
+#            fastcgi_cache_bypass 1;
+#            fastcgi_no_cache 1;
+#            include common/acl.conf;
+#        }
+
+        location ~ \.php$ {
+            try_files $uri =404;
+            fastcgi_pass unix:/run/php/php7.0-fpm.sock;
+            fastcgi_index index.php;
+            include fastcgi_params;
+
+            fastcgi_cache_bypass 1;
+            fastcgi_no_cache 1;
+        }
+
+        location = /wp-login.php {
+            fastcgi_keep_conn   on;
+            fastcgi_pass        unix:/run/php/php7.0-fpm.sock;
+            fastcgi_index       index.php;
+            include             fastcgi_params;
+
+            fastcgi_cache_bypass 1;
+            fastcgi_no_cache 1;
+        }
+
+        # Disallow PHP In Upload Folder
+        location /wp-content/uploads/ {
+                location ~ \.php$ {
+                        #Prevent Direct Access Of PHP Files From Web Browsers
+                        deny all;
+                }
+        }
+}
