@@ -6,7 +6,7 @@ script:
       docker --host tcp://armard.tayloredtechnology.net:8080 build -t tayloredtechnology.azurecr.io/basal:base https://${gitUser}@github.com/TayloredTechnology/basal.git
   - |
       # build wordprss
-      docker --host tcp://armard.tayloredtechnology.net:8080 build -t tayloredtechnology.azurecr.io/basal:wordpress https://${gitUser}@github.com/TayloredTechnology/basal.git
+      docker --host tcp://armard.tayloredtechnology.net:8080 build -t tayloredtechnology.azurecr.io/basal:wordpress https://${gitUser}@github.com/TayloredTechnology/basal.git#:wordpress/
 after_script:
   - |
       # push
