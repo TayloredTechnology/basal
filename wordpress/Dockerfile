@@ -2,8 +2,7 @@ FROM quay.io/tayloredtechnology/basal:latest
 
 MAINTAINER Keidrych Anton-Oates <keidrych@tayloredtechnology.net>
 
-RUN	install_packages php-fpm nginx-light unzip \
-		php-curl php-zip php-xml php-phar php-intl php-dom php-xmlreader php-ctype php-mbstring php-gd php-sqlite3
+RUN	install_packages php-fpm nginx-light unzip php-curl php-zip php-xml php-phar php-intl php-dom php-xmlreader php-ctype php-mbstring php-gd php-sqlite3
 
 RUN fetch --repo="https://github.com/h5bp/server-configs-nginx"  --tag=">=2.0.0" /etc/nginx/ && \
 		sed -i '/user www/c\user www-data;' /etc/nginx/nginx.conf && \
