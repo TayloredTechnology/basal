@@ -2,10 +2,14 @@ language: docker
 
 script:
   - |
-      # build
+      # build base
       docker --host tcp://armard.tayloredtechnology.net:8080 build -t tayloredtechnology.azurecr.io/basal:base https://${gitUser}@github.com/TayloredTechnology/basal.git
+  - |
+      # build wordprss
+      docker --host tcp://armard.tayloredtechnology.net:8080 build -t tayloredtechnology.azurecr.io/basal:wordpress https://${gitUser}@github.com/TayloredTechnology/basal.git
 after_script:
   - |
       # push
       docker --host tcp://armard.tayloredtechnology.net:8080 login tayloredtechnology.azurecr.io -u tayloredtechnology -p ${dockerLogin}
       docker --host tcp://armard.tayloredtechnology.net:8080 push tayloredtechnology.azurecr.io/basal:base
+      docker --host tcp://armard.tayloredtechnology.net:8080 push tayloredtechnology.azurecr.io/basal:wordpress
