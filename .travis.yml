@@ -7,4 +7,5 @@ script:
 after_script:
   - |
       # push
+      docker --host tcp://armard.tayloredtechnology.net:8080 login tayloredtechnology.azurecr.io -u tayloredtechnology -p ${dockerLogin}
       docker --host tcp://armard.tayloredtechnology.net:8080 push tayloredtechnology.azurecr.io/basal:base
