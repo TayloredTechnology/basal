@@ -24,7 +24,7 @@
 
 # Create public directory from mounted directories for serving with NGINX
 [ ! -d /public ] && mkdir /public
-cd /public/
+cd /app/
 # wp-config.php hard mounted @ / via DockerFile
 
 echo "Running WordPress Version:" $(grep wp_version /wordpress/wp-includes/version.php | tail -1 | cut -d"'" -f2)
@@ -33,13 +33,17 @@ echo "Running WordPress Version:" $(grep wp_version /wordpress/wp-includes/versi
 # Custom Uploads
 if [ ! -e /app/wp_installed ]; then
 	touch /app/wp_installed
-	cp -R /app/* /public/wp-content
+	[ ! -d /app/plugins ] && mkdir -p /app/plugins
+	# cp -R /app/* /public/wp-content
 	wget -N --no-verbose --quiet $(curl -s https://wordpress.org/plugins/sqlite-integration/ | egrep -o "https:\/\/downloads.wordpress.org\/plugin\/[^\"]+") -O /tmp/sqlite.zip
-	unzip /tmp/sqlite.zip -d /public/wp-content/plugins/
+	unzip /tmp/sqlite.zip -d /app/plugins/
 	rm /tmp/sqlite.zip
-	cp /public/wp-content/plugins/sqlite-integration/db.php /public/wp-content
 fi
 
+# Drop-ins
+cp /app/plugins/sqlite-integration/db.php /public/wp-content
+
+# Uploads
 rm -rf /public/wp-content/uploads
 ln -s /app/uploads /public/wp-content/uploads
 # Custom Themes
@@ -48,14 +52,14 @@ while IFS= read -r -d $'\0' f; do
 	[ "$dirname" == "themes" ] && continue
 	rm -rf /public/wp-content/themes/$dirname
 	ln -s /app/themes/$dirname /public/wp-content/themes/$dirname
-done < <(find wp-content/themes -maxdepth 1 -type d -print0)
+done < <(find themes -maxdepth 1 -type d -print0)
 # Custom Plugins
 while IFS= read -r -d $'\0' f; do
 	dirname=$(basename $f | tr -d ' ')
 	[ "$dirname" == "plugins" ] && continue
 	rm -rf /public/wp-content/plugins/$dirname
 	ln -s /app/plugins/$dirname /public/wp-content/plugins/$dirname
-done < <(find wp-content/plugins -maxdepth 1 -type d -print0)
+done < <(find plugins -maxdepth 1 -type d -print0)
 # EWWW Mappings
 [ ! -d /app/ewww ] && mkdir -p /app/ewww
 rm -rf /public/wp-content/ewww
