@@ -1,0 +1,17 @@
+*.{$ROOT_DOMAIN} {
+	redir https://{$ROOT_DOMAIN}{uri}
+}
+
+https://{$ROOT_DOMAIN} {
+	root /public/
+	gzip
+	log stdout
+	errors stderr
+
+	fastcgi / unix:/run/php/php7.0-fpm.sock php
+
+	rewrite {
+	    if {path} not_match ^\/wp-admin
+	    to {path} {path}/ /index.php?_url={uri}
+	}
+}

@@ -7,8 +7,8 @@ MAINTAINER Keidrych Anton-Oates <keidrych@tayloredtechnology.net>
 # Base Only Packages
 COPY base/sources.list /etc/apt/sources.list
 ENV DEBIAN_FRONTEND=noninteractive
-# RUN install_packages/install_packages netselect-apt curl && \
-#			netselect-apt -n stretch"
+RUN install_packages/install_packages netselect-apt curl && \
+		netselect-apt -n stretch"
 
 RUN install_packages sqlite3 curl procps htop ssmtp vim locales apt-transport-https lsb-release ca-certificates entr
 RUN update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX && \

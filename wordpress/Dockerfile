@@ -1,17 +1,20 @@
-FROM quay.io/tayloredtechnology/basal:latest
+FROM tayloredtechnology.azurecr.io/basal:base
 
 MAINTAINER Keidrych Anton-Oates <keidrych@tayloredtechnology.net>
 
-RUN	install_packages php-fpm nginx-light unzip php-curl php-zip php-xml php-phar php-intl php-dom php-xmlreader php-ctype php-mbstring php-gd php-sqlite3
+RUN	install_packages php-fpm unzip php-curl php-zip php-xml php-phar php-intl php-dom php-xmlreader php-ctype php-mbstring php-gd php-sqlite3
 
 RUN fetch --repo="https://github.com/h5bp/server-configs-nginx"  --tag=">=2.0.0" /etc/nginx/ && \
 		sed -i '/user www/c\user www-data;' /etc/nginx/nginx.conf && \
 		sed -i '/\/nginx.pid/c\pid \/run\/nginx.pid;' /etc/nginx/nginx.conf && \
 		sed -i '/daemonize/c\daemonize = no' /etc/php/*/fpm/php-fpm.conf
 
-RUN mkdir -p /usr/share/nginx/logs && \
-		ln -sf /dev/stdout /usr/share/nginx/logs/access.log && \
-    ln -sf /dev/stderr /usr/share/nginx/logs/error.log
+#RUN install_packages nginx-light
+#RUN mkdir -p /usr/share/nginx/logs && \
+#		ln -sf /dev/stdout /usr/share/nginx/logs/access.log && \
+#    ln -sf /dev/stderr /usr/share/nginx/logs/error.log
+
+RUN curl https://getcaddy.com | bash
 
 # Service Required Ports
 EXPOSE 80
@@ -40,6 +43,9 @@ ADD cont-init.d/ /etc/cont-init.d/
 RUN chmod +x /etc/services.d/* && chmod +x /etc/cont-init.d/*
 
 #ADD fix-attrs.d/ /etc/fix-attrs.d/
+
+ADD caddyserver/Caddyfile /Caddyfile
+ENV CADDYPATH /app/.caddy/
 
 # Confd Configuration files
 COPY confd/ /etc/confd/
