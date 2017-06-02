@@ -2,6 +2,6 @@
 
 with-contenv
 s6-envuidgid www-data
-import -u ROOT_DOMAIN
+importas ROOT_DOMAIN ROOT_DOMAIN
 
 exec caddy -agree -conf	 /Caddyfile -email basal@${ROOT_DOMAIN}
