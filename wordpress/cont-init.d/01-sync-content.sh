@@ -31,33 +31,7 @@ echo "Running WordPress Version:" $(grep wp_version /wordpress/wp-includes/versi
 
 # Link the custom content folders (overrinding the template)
 # Custom Uploads
-if [ -e /app/wp_installed ]; then
-	rm -rf /public/wp-content/uploads
-	ln -s /app/uploads /public/wp-content/uploads
-	# Custom Themes
-	while IFS= read -r -d $'\0' f; do
-	  dirname=$(basename $f | tr -d ' ')
-	  [ "$dirname" == "themes" ] && continue
-	  rm -rf /public/wp-content/themes/$dirname
-		ln -s /app/themes/$dirname /public/wp-content/themes/$dirname
-	done < <(find wp-content/themes -maxdepth 1 -type d -print0)
-	# Custom Plugins
-	while IFS= read -r -d $'\0' f; do
-	  dirname=$(basename $f | tr -d ' ')
-	  [ "$dirname" == "plugins" ] && continue
-	  rm -rf /public/wp-content/plugins/$dirname
-		ln -s /app/plugins/$dirname /public/wp-content/plugins/$dirname
-	done < <(find wp-content/plugins -maxdepth 1 -type d -print0)
-	# EWWW Mappings
-	[ ! -d /app/ewww ] && mkdir -p /app/ewww
-	rm -rf /public/wp-content/ewww
-	ln -s /app/ewww /public/wp-content/ewww
-	# Required Logging
-	[ ! -d /app/logs ] && mkdir -p /app/logs
-	rm -rf /public/wp-content/logs
-	ln -s /app/logs /public/wp-content/logs
-	# Database Mappings is not necessary as write directly to the mount volume
-else
+if [ ! -e /app/wp_installed ]; then
 	touch /app/wp_installed
 	cp -R /app/* /public/wp-content
 	wget -N --no-verbose --quiet $(curl -s https://wordpress.org/plugins/sqlite-integration/ | egrep -o "https:\/\/downloads.wordpress.org\/plugin\/[^\"]+") -O /tmp/sqlite.zip
@@ -65,3 +39,32 @@ else
 	rm /tmp/sqlite.zip
 	cp /public/wp-content/plugins/sqlite-integration/db.php /public/wp-content
 fi
+
+rm -rf /public/wp-content/uploads
+ln -s /app/uploads /public/wp-content/uploads
+# Custom Themes
+while IFS= read -r -d $'\0' f; do
+	dirname=$(basename $f | tr -d ' ')
+	[ "$dirname" == "themes" ] && continue
+	rm -rf /public/wp-content/themes/$dirname
+	ln -s /app/themes/$dirname /public/wp-content/themes/$dirname
+done < <(find wp-content/themes -maxdepth 1 -type d -print0)
+# Custom Plugins
+while IFS= read -r -d $'\0' f; do
+	dirname=$(basename $f | tr -d ' ')
+	[ "$dirname" == "plugins" ] && continue
+	rm -rf /public/wp-content/plugins/$dirname
+	ln -s /app/plugins/$dirname /public/wp-content/plugins/$dirname
+done < <(find wp-content/plugins -maxdepth 1 -type d -print0)
+# EWWW Mappings
+[ ! -d /app/ewww ] && mkdir -p /app/ewww
+rm -rf /public/wp-content/ewww
+ln -s /app/ewww /public/wp-content/ewww
+# Required Logging
+[ ! -d /app/logs ] && mkdir -p /app/logs
+rm -rf /public/wp-content/logs
+ln -s /app/logs /public/wp-content/logs
+# Database Mappings is not necessary as write directly to the mount volume
+
+chown -R www-data:www-data /app
+chown -R www-data:www-data /public
