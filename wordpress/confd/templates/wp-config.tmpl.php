@@ -20,7 +20,7 @@ $_SERVER['SERVER_PORT'] = 443;
 
 # Set to core wordpress url the entire site
 define('WP_HOME', 'https://{{getenv "ROOT_DOMAIN"}}');
-define('WP_SITEURL', 'https://{{getenv "ROOT_DOMAIN"}});
+define('WP_SITEURL', 'https://{{getenv "ROOT_DOMAIN"}}');
 
 # Disallow Plugin Uploads / Editing PHP files from all sites except Cyberspaced Core
 if (strpos('{{getenv "ROOT_DOMAIN"}}', 'cyberspaced') !== false) {

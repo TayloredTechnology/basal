@@ -27,27 +27,11 @@
 cd /public/
 # wp-config.php hard mounted @ / via DockerFile
 
-# Update website to latest version
-if [ ! -z $INSTALL_VERSION ]; then
-	# # Download & Install the tagged version of WordPress
-	# [ ! -d /wordpress ] && mkdir /wordpress
-	# cd /wordpress
-	# wget --no-check-certificate https://github.com/WordPress/WordPress/archive/$INSTALL_VERSION.zip -O /tmp/$INSTALL_VERSION.zip
-	# unzip -o -q /tmp/$INSTALL_VERSION.zip -d /tmp/
-	# rm -rf /tmp/WordPress-$INSTALL_VERSION/wp-content/*
-	# rm -rf /tmp/WordPress-$INSTALL_VERSION/wp-config.php
-	# mv /tmp/WordPress-$INSTALL_VERSION/* /public
-	# # cleanup
-	# rm /tmp/$INSTALL_VERSION.zip
-	# rm -rf /tmp/WordPress-$INSTALL_VERSION
-# else
-	echo "INSTALL_VERSION not specified..."
-	echo "Running WordPress Version:" $(grep wp_version /wordpress/wp-includes/version.php | tail -1 | cut -d"'" -f2)
-fi
+echo "Running WordPress Version:" $(grep wp_version /wordpress/wp-includes/version.php | tail -1 | cut -d"'" -f2)
 
 # Link the custom content folders (overrinding the template)
 # Custom Uploads
-if [ -z $INSTALL_VERSION ]; then
+if [ -e /app/wp_installed ]; then
 	rm -rf /public/wp-content/uploads
 	ln -s /app/uploads /public/wp-content/uploads
 	# Custom Themes
@@ -74,6 +58,7 @@ if [ -z $INSTALL_VERSION ]; then
 	ln -s /app/logs /public/wp-content/logs
 	# Database Mappings is not necessary as write directly to the mount volume
 else
+	touch /app/wp_installed
 	cp -R /app/* /public/wp-content
 	wget -N --no-verbose --quiet $(curl -s https://wordpress.org/plugins/sqlite-integration/ | egrep -o "https:\/\/downloads.wordpress.org\/plugin\/[^\"]+") -O /tmp/sqlite.zip
 	unzip /tmp/sqlite.zip -d /public/wp-content/plugins/
