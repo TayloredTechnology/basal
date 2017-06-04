@@ -27,7 +27,7 @@
 cd /app/
 # wp-config.php hard mounted @ / via DockerFile
 
-echo "Running WordPress Version:" $(grep wp_version /wordpress/wp-includes/version.php | tail -1 | cut -d"'" -f2)
+echo "Running WordPress Version:" $(grep wp_version /public/wp-includes/version.php | tail -1 | cut -d"'" -f2)
 
 # Link the custom content folders (overrinding the template)
 # Custom Uploads
@@ -47,6 +47,8 @@ cp /app/plugins/sqlite-integration/db.php /public/wp-content
 rm -rf /public/wp-content/uploads
 ln -s /app/uploads /public/wp-content/uploads
 # Custom Themes
+[ ! -d /public/wp-content/themes ] && mkdir -p /public/wp-content/themes
+[ ! -d /app/themes ] && mkdir -p /app/themes
 while IFS= read -r -d $'\0' f; do
 	dirname=$(basename $f | tr -d ' ')
 	[ "$dirname" == "themes" ] && continue
@@ -54,6 +56,7 @@ while IFS= read -r -d $'\0' f; do
 	ln -s /app/themes/$dirname /public/wp-content/themes/$dirname
 done < <(find themes -maxdepth 1 -type d -print0)
 # Custom Plugins
+[ ! -d /public/wp-content/plugins ] && mkdir -p /public/wp-content/plugins
 while IFS= read -r -d $'\0' f; do
 	dirname=$(basename $f | tr -d ' ')
 	[ "$dirname" == "plugins" ] && continue

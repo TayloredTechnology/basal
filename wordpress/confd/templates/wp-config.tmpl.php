@@ -94,9 +94,9 @@ define( 'AUTOMATIC_UPDATER_DISABLED', false );
  * Wordpress Storage Paths (allows for architecture moving)
  */
 define( 'WP_CONTENT_DIR', dirname(__FILE__) . '/wp-content' );
-define( 'WP_CONTENT_URL', 'https://'.getenv('ROOT_DOMAIN').'/wp-content' );
+define( 'WP_CONTENT_URL', 'https://{{getenv "ROOT_DOMAIN"}}/wp-content' );
 define( 'WP_PLUGIN_DIR', dirname(__FILE__) . '/wp-content/plugins' );
-define( 'WP_PLUGIN_URL', 'https://'.getenv('ROOT_DOMAIN').'/wp-content/plugins' );
+define( 'WP_PLUGIN_URL', 'https://{{getenv "ROOT_DOMAIN"}}/wp-content/plugins' );
 define( 'PLUGINDIR', dirname(__FILE__) . '/wp-content/plugins' );
 define( 'UPLOADS', 'wp-content/uploads' );
 
