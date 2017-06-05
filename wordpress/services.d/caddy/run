@@ -4,4 +4,4 @@ with-contenv
 s6-envuidgid www-data
 importas ROOT_DOMAIN ROOT_DOMAIN
 
-exec caddy -agree -conf	 /Caddyfile -email basal@${ROOT_DOMAIN} -ca https://acme-staging.api.letsencrypt.org/directory
+exec caddy -agree -quiet -quic -conf	 /Caddyfile -email basal@${ROOT_DOMAIN} -ca https://acme-staging.api.letsencrypt.org/directory
