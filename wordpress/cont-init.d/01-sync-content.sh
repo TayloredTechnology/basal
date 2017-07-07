@@ -49,6 +49,7 @@ else
 	ln -s /app/plugins /public/wp-content/plugins
 	ln -s /app/themes /public/wp-content/themes
 
+	# TODO inform confd that plugins should be installable
 fi
 
 ln -s /app/ewww /public/wp-content/ewww
@@ -60,6 +61,11 @@ if [ ! -d /public/wp-content/plugins/sqlite-integration ]; then
 	wget -N --no-verbose --quiet $(curl -s https://wordpress.org/plugins/sqlite-integration/ | egrep -o "https:\/\/downloads.wordpress.org\/plugin\/[^\"]+") -O /tmp/sqlite.zip
 	unzip /tmp/sqlite.zip -d /public/wp-content/plugins/
 	rm /tmp/sqlite.zip
+fi
+if [ ! -d /public/utilz ]; then
+	mkdir -p /public/utilz
+	# https://github.com/amnuts/opcache-gui for OpCache Viewer
+	curl -L -o /public/utilz/index.php https://raw.githubusercontent.com/amnuts/opcache-gui/master/index.php
 fi
 
 # Drop-ins
