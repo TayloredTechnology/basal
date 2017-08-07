@@ -1,16 +1,14 @@
-FROM bitnami/minideb:unstable
+FROM bitnami/minideb:stretch
 
 MAINTAINER Keidrych Anton-Oates <keidrych@tayloredtechnology.net>
 
 # 0@Cache -- Perma-Cached
-# Update to testing / stretch branch for SQLite & latest stable? updates
 # Base Only Packages
-COPY base/sources.list /etc/apt/sources.list
 ENV DEBIAN_FRONTEND=noninteractive
-RUN install_packages netselect-apt curl && \
-		netselect-apt -n stretch
+# RUN install_packages netselect-apt curl && \
+#		netselect-apt -n stretch
 
-RUN install_packages sqlite3 curl procps htop ssmtp vim locales apt-transport-https lsb-release ca-certificates entr
+RUN install_packages sqlite3 curl httpie procps htop ssmtp vim locales apt-transport-https lsb-release ca-certificates entr
 RUN update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX && \
 		locale-gen en_US.UTF-8 && \
 		dpkg-reconfigure locales && \
@@ -29,8 +27,8 @@ ARG VS6=v1.19.1.1
 RUN fetch --repo="https://github.com/just-containers/s6-overlay" --tag="$VS6" --release-asset="s6-overlay-amd64.tar.gz" /tmp/ && \
 		tar xzf /tmp/s6-overlay-amd64.tar.gz -C /
 
-ARG VCONFD=0.12.0-alpha3
-RUN fetch --repo="https://github.com/kelseyhightower/confd" --tag="=v$VCONFD" --release-asset="confd-$VCONFD-linux-amd64" /usr/bin/ && \
+ARG VCONFD=0.12.1
+RUN fetch --repo="https://github.com/bacongobbler/confd" --tag="=v$VCONFD" --release-asset="confd-$VCONFD-linux-amd64" /usr/bin/ && \
 		mv /usr/bin/confd-$VCONFD-linux-amd64 /usr/bin/confd && \
 		chmod +x /usr/bin/confd
 

@@ -4,6 +4,9 @@
 ## Purpose
 Create a suite of containers utilizing the best practices for running & scaling applications in cloud and OS independent ways.
 
+## Approach
+This uses a git-tree release strategy, all development work is completed on 'master' and each docker image to be compiled is released into a branch
+
 ## Technology
 - JustContainers Implementation of Skarnet's S6 Hypervisior Suite
 - Fetch for grabbing repo's & releases off GitHub
