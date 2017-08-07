@@ -39,4 +39,4 @@ ENTRYPOINT ["/init"]
 VOLUME ["/app"]
 
 # Confd Configuration files
-COPY base/confd/ /etc/confd/
+COPY confd/ /etc/confd/
