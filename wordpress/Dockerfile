@@ -1,4 +1,4 @@
-FROM tayloredtechnology.azurecr.io/basal:base
+FROM quay.io/tayloredtechnology/basal:base
 
 MAINTAINER Keidrych Anton-Oates <keidrych@tayloredtechnology.net>
 
