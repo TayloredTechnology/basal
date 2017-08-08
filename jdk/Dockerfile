@@ -4,7 +4,7 @@
 # Alpine only images are available
 # We only provide the unlimited versions for application flexibility
 
-FROM anapsix/alpine-java:8_server-jdk_unlimited
+FROM anapsix/alpine-java:8_jdk_unlimited
 
 MAINTAINER Keidrych Anton-Oates <keidrych@tayloredtechnology.net>
 
