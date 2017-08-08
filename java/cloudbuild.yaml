@@ -1,8 +1,13 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build',
-           '-f', 'Dockerfile',
-           '-t', 'gcr.io/taylored-technology/$REPO_NAME:java', '.']
+           '-f', 'java/Dockerfile.jdk',
+           '-t', 'gcr.io/taylored-technology/$REPO_NAME:JDK', 'java']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build',
+           '-f', 'java/Dockerfile.jre',
+           '-t', 'gcr.io/taylored-technology/$REPO_NAME:JRE', 'java']
 
 images:
-  - 'gcr.io/taylored-technology/$REPO_NAME:java'
+  - 'gcr.io/taylored-technology/$REPO_NAME:8_JDK'
+  - 'gcr.io/taylored-technology/$REPO_NAME:8_JRE'
