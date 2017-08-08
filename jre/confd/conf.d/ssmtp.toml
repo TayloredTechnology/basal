@@ -1,0 +1,6 @@
+[template]
+src = "ssmtp.tmpl.conf"
+dest = "/ssmtp/ssmtp.conf"
+keys = [
+  "/ssmtp",
+]
