@@ -1,6 +1,0 @@
-[template]
-src = "ssmtp-revaliases.tmpl"
-dest = "/ssmtp/revaliases"
-keys = [
-  "/ssmtp",
-]
