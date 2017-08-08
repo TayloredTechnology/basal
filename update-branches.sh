@@ -9,5 +9,6 @@ for branched in $(git for-each-ref refs/heads | cut -d/ -f3-); do
   git checkout $branched
   git checkout master -- ./$branched
   git commit -am "Release Master Changes"
-  git checkout master
 done
+
+git checkout master
