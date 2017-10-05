@@ -32,11 +32,17 @@ RUN fetch --repo="https://github.com/bacongobbler/confd" --tag="=v$VCONFD" --rel
 		mv /usr/bin/confd-$VCONFD-linux-amd64 /usr/bin/confd && \
 		chmod +x /usr/bin/confd
 
+ARG VWEBHOOK=2.6.4
+RUN fetch --repo="https://github.com/adnanh/webhook" --tag=">=$VWEBHOOK" --release-asset="webhook-linux-amd64.tar.gz" /tmp/ && \
+		tar xvf /tmp/webhook-linux-amd64.tar.gz && mv webhook-linux-amd64/webhook /usr/bin/webhook && rm -rf webhook-linux-amd64
+
 # S6 always uses /init to run
 ENTRYPOINT ["/init"]
 
 # Volumes
 VOLUME ["/app"]
+
+WORKDIR /app
 
 # Confd Configuration files
 COPY confd/ /etc/confd/
