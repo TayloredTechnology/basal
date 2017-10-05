@@ -1,27 +1,18 @@
-FROM bitnami/minideb:stretch
+# There already exists an excellent repo for Java Images, so rather than duplicate
+# we're using their base image and adding layers ontop for better compatibility
+#
+# Alpine only images are available
+# We only provide the unlimited versions for application flexibility
+
+FROM anapsix/alpine-java:8_server-jre_unlimited
 
 MAINTAINER Keidrych Anton-Oates <keidrych@tayloredtechnology.net>
 
-# 0@Cache -- Perma-Cached
-# Base Only Packages
-ENV DEBIAN_FRONTEND=noninteractive
-# RUN install_packages netselect-apt curl && \
-#		netselect-apt -n stretch
-
-RUN install_packages sqlite3 curl httpie procps htop ssmtp vim locales apt-transport-https lsb-release ca-certificates entr
-RUN update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX && \
-		locale-gen en_US.UTF-8 && \
-		dpkg-reconfigure locales && \
-		mkdir -p /ssmtp
-#	wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg && \
-#	echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
+RUN apk --no-cache add curl htop ssmtp vim
 
 ARG VFETCH=v0.1.1
 RUN	curl --location -o /bin/fetch https://github.com/gruntwork-io/fetch/releases/download/$VFETCH/fetch_linux_amd64 && \
 		chmod a+x /bin/fetch
-#	fetch --repo="https://github.com/gruntwork-io/fetch" --tag=">=0.1.1" --release-asset="fetch_linux_amd64" /bin/ && \
-#	mv /bin/fetch_linux_amd64 /bin/fetch && \
-#	chmod a+x /bin/fetch
 
 ARG VS6=v1.19.1.1
 RUN fetch --repo="https://github.com/just-containers/s6-overlay" --tag="$VS6" --release-asset="s6-overlay-amd64.tar.gz" /tmp/ && \
@@ -41,8 +32,6 @@ ENTRYPOINT ["/init"]
 
 # Volumes
 VOLUME ["/app"]
-
-WORKDIR /app
 
 # Confd Configuration files
 COPY confd/ /etc/confd/

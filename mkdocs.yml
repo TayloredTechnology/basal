@@ -1,0 +1,17 @@
+site_name: Yūgen by Taylored Technology
+theme: material
+markdown_extensions:
+    - pymdownx.tasklist
+    - admonition
+    - codehilite(guess_lang=false)
+    - toc(permalink=true)
+extra_css:
+    - css/custom.css
+extra:
+  palette:
+    primary: 'blue grey'
+    accent: 'amber'
+  logo: 'images/ttlogo.jpg'
+repo_name: 'tayloredtechnology/yugen'
+repo_url: 'https://github.com/tayloredtechnology/yugen'
+site_favicon: 'images/favicon.ico'

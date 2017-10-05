@@ -38,18 +38,18 @@ if [ -e /public/wp-content ]; then
 		ln -s /app/plugins/$dirname /public/wp-content/plugins/$dirname
 	done < <(find /app/plugins -maxdepth 1 -type d -print0)
 
-	# TODO safely merge in the additional optimised tracking @ ewww
+	# TODO:0 safely merge in the additional optimised tracking @ ewww id:0
 	rm -rf /public/wp-content/ewww
 	rm -rf /public/wp-content/logs
 else
 	# Creating a template, create the initial mapping (persisted to volume)
 	# Able to be persisted to Docker Image through script execution
-	# TODO persistance script
+	# TODO:0 persistance script id:2
 	mkdir -p /public/wp-content
 	ln -s /app/plugins /public/wp-content/plugins
 	ln -s /app/themes /public/wp-content/themes
 
-	# TODO inform confd that plugins should be installable
+	# TODO:0 inform confd that plugins should be installable id:4
 fi
 
 ln -s /app/ewww /public/wp-content/ewww
