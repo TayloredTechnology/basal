@@ -12,7 +12,7 @@ RUN install_packages sqlite3 curl httpie procps htop ssmtp vim locales apt-trans
 RUN update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX && \
 		locale-gen en_US.UTF-8 && \
 		dpkg-reconfigure locales && \
-		mkdir -p /ssmtp
+		mkdir -p /ssmtp && mkdir -p /app
 #	wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg && \
 #	echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
 
@@ -39,8 +39,10 @@ RUN fetch --repo="https://github.com/adnanh/webhook" --tag=">=$VWEBHOOK" --relea
 # S6 always uses /init to run
 ENTRYPOINT ["/init"]
 
-# Volumes
-VOLUME ["/app"]
+# Directory Structure
+# Not mounted as a volume to prevent downstream services from breaking when volume unmounts in layers i.e. npm install
+# /app for the application (irrespective of language)
+# VOLUME ["/app"]
 
 WORKDIR /app
 
