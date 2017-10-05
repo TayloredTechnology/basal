@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # RUN install_packages netselect-apt curl && \
 #		netselect-apt -n stretch
 
-RUN install_packages sqlite3 curl httpie procps htop ssmtp vim locales apt-transport-https lsb-release ca-certificates entr
+RUN install_packages sqlite3 curl httpie procps htop ssmtp vim locales apt-transport-https lsb-release ca-certificates entr gnupg
 RUN update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX && \
 		locale-gen en_US.UTF-8 && \
 		dpkg-reconfigure locales && \
